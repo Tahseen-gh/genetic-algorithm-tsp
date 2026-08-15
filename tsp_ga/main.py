@@ -6,7 +6,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-from ga import run_ga
+from ga import run_ga, TOURNAMENT_SIZE
 
 
 def plot_fitness_curve(best_distances, output_path):
@@ -56,7 +56,20 @@ def parse_args():
                          help="Random seed for reproducible runs (default: unseeded)")
     parser.add_argument("--output-dir", type=str, default="output",
                          help="Directory to save plots to (default: output)")
-    return parser.parse_args()
+    args = parser.parse_args()
+
+    if args.num_cities < 2:
+        parser.error(
+            f"--num-cities must be at least 2 (got {args.num_cities}); "
+            "crossover picks two distinct crossover points, so it needs at least two cities to choose from."
+        )
+    if args.population_size < TOURNAMENT_SIZE:
+        parser.error(
+            f"--population-size must be at least {TOURNAMENT_SIZE} (got {args.population_size}); "
+            f"tournament selection samples {TOURNAMENT_SIZE} individuals without replacement each time it picks a parent."
+        )
+
+    return args
 
 
 def main():
