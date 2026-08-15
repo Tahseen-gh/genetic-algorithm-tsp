@@ -58,10 +58,12 @@ def parse_args():
                          help="Directory to save plots to (default: output)")
     args = parser.parse_args()
 
-    if args.num_cities < 2:
+    if args.num_cities < 3:
         parser.error(
-            f"--num-cities must be at least 2 (got {args.num_cities}); "
-            "crossover picks two distinct crossover points, so it needs at least two cities to choose from."
+            f"--num-cities must be at least 3 (got {args.num_cities}); "
+            "crossover picks two distinct crossover points from the city range, so below 3 cities it "
+            "either has no valid pair to pick (and crashes) or only one possible pair, which just "
+            "clones a parent instead of recombining two tours."
         )
     if args.population_size < TOURNAMENT_SIZE:
         parser.error(

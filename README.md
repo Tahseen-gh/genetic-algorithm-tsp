@@ -6,15 +6,6 @@ Run it with the defaults, 10 cities, a population of 50, 100 generations, and it
 
 This started as a lab assignment for a graduate algorithms course. I've since restructured the notebook into a small Python package: same GA logic, split into modules, runnable from the command line, plots written to disk instead of popping up inline.
 
-## Layout
-
-- `tsp_ga/tour.py`: tour representation, distance, and fitness (inverse of distance, so shorter tours score higher)
-- `tsp_ga/operators.py`: selection, crossover, mutation
-- `tsp_ga/ga.py`: the generational loop and the convergence check
-- `tsp_ga/main.py`: CLI, wires everything together, saves the plots
-- `docs/`: two plots from an example run (`--seed 42`), committed so they render on GitHub
-- `output/`: where your own runs land. Gitignored, it's just scratch output.
-
 ## How the GA works
 
 A tour is a permutation of city indices, e.g. `[3, 0, 4, 1, 2]` means visit city 3, then city 0, then city 4, and so on, then return to city 3. Fitness is `1 / total_distance`, so a shorter tour scores higher.
@@ -28,6 +19,15 @@ The fix is order crossover (OX): copy a slice from parent 1 into the child, then
 **Mutation.** Swap mutation: with probability `mutation_rate`, pick two positions in the tour and swap them. Same reasoning as crossover, a swap can't produce an invalid tour, since it's still a permutation of the same cities. One thing to know if you're tuning `mutation_rate`: it's checked once per child, not once per city. A rate of 0.2 means a 20% chance the child gets exactly one swap, not that each city independently has a 20% chance of moving. Turning the rate up increases how many children get touched, not how many swaps land on any single one of them.
 
 **Elitism.** The top 2 tours survive unchanged into the next generation before any breeding happens. This guarantees the best tour found so far never gets lost to a bad crossover draw or an unlucky mutation. The best-so-far distance can only hold steady or improve, generation over generation, never regress.
+
+## Layout
+
+- `tsp_ga/tour.py`: tour representation, distance, and fitness (inverse of distance, so shorter tours score higher)
+- `tsp_ga/operators.py`: selection, crossover, mutation
+- `tsp_ga/ga.py`: the generational loop and the convergence check
+- `tsp_ga/main.py`: CLI, wires everything together, saves the plots
+- `docs/`: two plots from an example run (`--seed 42`), committed so they render on GitHub
+- `output/`: where your own runs land. Gitignored, it's just scratch output.
 
 ## Convergence
 
@@ -51,7 +51,7 @@ Flags:
 - `--seed`: set this for a reproducible run
 - `--output-dir`: where the plots get saved (default `output`)
 
-Bigger problem, fixed seed:
+For a larger run with a fixed seed:
 
 ```
 python tsp_ga/main.py --num-cities 25 --population-size 100 --generations 300 --mutation-rate 0.15 --seed 7
