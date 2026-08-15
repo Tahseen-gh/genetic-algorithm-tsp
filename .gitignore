@@ -216,3 +216,8 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Scratch output from running the GA (plots go here by default; see docs/ for
+# the tracked example plots)
+output/
+
